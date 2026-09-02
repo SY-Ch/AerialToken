@@ -108,9 +108,12 @@ def main():
     crop_size = (args.height, args.width)
     weight = load_weight(pretrained_path)
     print("Load from", pretrained_path)
-    # interpolate_patch_embed_(weight, kernel_conv=kernel_conv)
-    # interpolate_pos_embed_(weight, crop_size=crop_size, kernel_conv=kernel_conv)
-    # weight.update({f"backbone.{k}": v for k, v in weight.items()})
+    # The visual branch is resampled exactly like the geometry branch below: the
+    # 14x14 patch kernel is resized to 16x16 and the 37x37 position-embedding
+    # grid to 32x32, both bicubically. This is what makes the two encoders emit
+    # token grids of the same size, so their blocks pair one to one.
+    interpolate_patch_embed_(weight, kernel_conv=kernel_conv)
+    interpolate_pos_embed_(weight, crop_size=crop_size, kernel_conv=kernel_conv)
     depthweight = load_weight(depthanything_path)
     print("Load from", depthanything_path)
     sd_no_pretrained, changed_keys = remove_pretrained_prefix(depthweight)

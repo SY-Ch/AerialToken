@@ -115,7 +115,17 @@ Convert the pre-trained weights for training or evaluation by running:
 python tools/convert_models/convert_dinov2_depth.py checkpoints/dinov2_vitl14_pretrain.pth checkpoints/depth_anything_v2_vitl.pth checkpoints/dinov2_converted_depth.pth
 ```
 
-The conversion resamples the 14x14 patch embedding to 16x16, which is what makes the two token grids identical.
+This step is what makes the two encoders comparable block by block. Both DINOv2
+ViT-L and the Depth Anything V2 encoder are released with a 14x14 patch
+embedding and a 37x37 position-embedding grid. For each branch the script
+resamples the patch-embedding kernel from 14x14 to 16x16 bicubically, and the
+position-embedding grid from 37x37 to 32x32 bicubically, keeping the class
+token unchanged. A 512x512 input then divides evenly (512 / 16 = 32), so both
+branches produce a 32x32 token grid with 1024 channels over 24 blocks, and the
+geometry token of block k pairs with the visual token of block k without any
+interpolation or channel projection at run time. Both resampled encoders are
+written into a single file, the visual weights under their original names and
+the geometry weights under a `depth_anything.` prefix.
 
 ## Training
 
