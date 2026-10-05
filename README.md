@@ -1,4 +1,4 @@
-# AerialToken: Geometry-Guided Domain Generalization for Remote Sensing Semantic Segmentation
+# [TGRS 2026] AerialToken: Geometry-Guided Domain Generalization for Remote Sensing Semantic Segmentation
 
 ## Installation & Environment Setup
 
@@ -158,6 +158,8 @@ bash tools/dist_train.sh configs/aerialtoken/aerialtoken_dinov2_mask2former_512x
 Checkpoints land in `work_dirs/<config name>/`. The paper reports the **final** checkpoint of the schedule, `iter_40000.pth`; nothing is selected on target-domain scores. Validation therefore runs once, at the end of training, and prints exactly the numbers of the tables.
 
 ## Evaluation
+
+The converted backbone and the trained AerialToken weights are available on [Google Drive](https://drive.google.com/drive/folders/1_UO4uhMpDrPBjsQ066D0Mmz6h1g8HRQH).
 
 To evaluate a trained model, replace `<AerialToken model>.pth` with your model file and run the corresponding command. Training saves only the trainable parameters, so the backbone checkpoint `checkpoints/dinov2_converted_depth.pth` is supplied separately in all evaluations:
 
